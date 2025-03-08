@@ -1,3 +1,6 @@
+Original development dates: October - December 2018
+
+## Usage
 To run:
 
 1. In cmd prompt, cd to project folder and run 'npm run dev'. This launches the browser.
