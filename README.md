@@ -1,3 +1,10 @@
+Original development dates: October - December 2018
+
+Code and Demo Video on Google Drive: https://drive.google.com/drive/folders/1CvKxutz2_IRE6RMNc43TxOZyyrLgY7Jt?usp=sharing
+
+See writeup_draft.md for full project description.
+
+## Usage
 To run:
 
 1. In cmd prompt, cd to project folder and run 'npm run dev'. This launches the browser.
