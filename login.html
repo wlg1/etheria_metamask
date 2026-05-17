@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>ETHERIA: the back page of the internet</title>
+  <link rel="icon" href="./medjed-black.png">
+  <link rel="stylesheet" type="text/css" href="./style.css">
+  <script src="./node_modules/web3/dist/web3.min.js"></script>
+  <script src='./script.js'> </script>
+  <link href="https://use.fontawesome.com/releases/v5.0.7/css/all.css" rel="stylesheet">
+</head>
+<body onload="load_side_grid();">
+  <header class='grid-white-bar'>
+      <li>-</li>
+  </header>
+  <nav class='grid-nav'>
+    <img src='./medjed-black.png' alt='X' class='reddit-pic'>
+    <div class="dropdown">
+    <button onclick="clickDropdown()" class="dropbtn">COMMUNITY
+      <i class="fa fa-caret-down fa-fw"></i>
+    </button>
+    <div id="myDropdown" class="dropdown-content">
+      <a href="#">[ ETHERS ]</a>
+      <a href="#">[ BITCOINS ]</a>
+      <a href="#">[ BLOCKCHAINS ]</a>
+      <a href="#">[ BLOCKCHAINS ]</a>
+      <a href="#">[ BLOCKCHAINS ]</a>
+      <a href="#">[ BLOCKCHAINS ]</a>
+      <a href="#">[ BLOCKCHAINS ]</a>
+      <a href="#">[ BLOCKCHAINS ]</a>
+      <a href="#">[ BLOCKCHAINSSSSSSSSSSSS ]</a>
+      <a href="#">[ BLOCKCHAINSSSSSSSSSSSS ]</a>
+      <a href="#">[ BLOCKCHAINSSSSSSSSSSSS ]</a>
+      <a href="#">[ BLOCKCHAINSSSSSSSSSSSS ]</a>
+      <a href="#">[ BLOCKCHAINSSSSSSSSSSSS ]</a>
+      <a href="#">[ BLOCKCHAINSSSSSSSSSSSS ]</a>
+      <a href="#">[ BLOCKCHAINSSSSSSSSSSSS ]</a>
+      <a href="#">[ BLOCKCHAINSSSSSSSSSSSS ]</a>
+    </div>
+  </div>
+    <div>
+      <ul>
+        <li>best</li>
+        <li id='hot-hack'>new</li>
+      </ul>
+    </div>
+    <p class='title'><a href="index.html" id ="to_index"><img src='./title.png' alt='ETHERIA' class='title-pic'></a></p>
+    <input placeholder='SEARCH...' class='search-text-input'>
+    <button class='search-button'>
+      <a href='#'><img id='magnifier' src='./search.png'></a>
+    </button>
+    <div>
+      <ul>
+        <li>old</li>
+        <li id='hot-hack'>worst</li>
+      </ul>
+    </div>
+  <img src='./medjed-black.png' alt='X' class='reddit-pic'>
+  </nav>
+  <header class='grid-white-bar'>
+      <li>-</li>
+  </header>
+
+  <div class='side-grid-left' id="side-grid-container">
+  </div>
+
+  <div class='side-grid-right'>
+    <ul><a class='user-action-button' href='submit_post.html' id='to_submit_post'>POST</a></ul>
+    <ul>
+      <span class='as-user-style-pre'>as: </span>
+      <p class='as-user-style' id='as-username'></p>
+    </ul>
+    <ul></ul>
+    <ul></ul>
+    <img src='./right_joystick.png' alt='REDDIT' class='reddit-pic'>
+  </div>
+
+  <div class="post-input">
+  	<textarea id="signup-input" class = "post-input-box" type="text" cols="40" rows="1"></textarea>
+  	<center>
+  	<a href='#'><button id="signup-button" class = "comment-button">SIGN UP</button></a>
+	</center>
+  </div>
+
+  <div class="post-input">
+  <center>
+  <a href='#'><button id="login-button" class = "comment-button">LOG IN</button></a>
+  </center>
+  </div>
+
+  <center>
+  	<span class='labels' id='login-result'></span>
+  	<span class='labels-2' id='login-result-2'></span>
+  </center>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+<script>
+ if (typeof web3 !== 'undefined') {
+     web3 = new Web3(web3.currentProvider);
+ } else {
+     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+ }
+
+web3.eth.defaultAccount = web3.eth.accounts[0];
+
+ var ContractVar = web3.eth.contract([
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_commentnum",
+				"type": "uint256"
+			},
+			{
+				"name": "_postnum",
+				"type": "uint256"
+			}
+		],
+		"name": "getCommentTime",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_commentnum",
+				"type": "uint256"
+			},
+			{
+				"name": "_postnum",
+				"type": "uint256"
+			}
+		],
+		"name": "voteCommentUp",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "userMap",
+		"outputs": [
+			{
+				"name": "name",
+				"type": "bytes32"
+			},
+			{
+				"name": "signedup",
+				"type": "bool"
+			},
+			{
+				"name": "id",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_postnum",
+				"type": "uint256"
+			}
+		],
+		"name": "votePostUp",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_commentID",
+				"type": "int256"
+			}
+		],
+		"name": "getCommentByID",
+		"outputs": [
+			{
+				"name": "",
+				"type": "int256"
+			},
+			{
+				"name": "",
+				"type": "bytes32"
+			},
+			{
+				"name": "",
+				"type": "bytes32"
+			},
+			{
+				"name": "",
+				"type": "bytes32"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "timearr",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "votearr",
+		"outputs": [
+			{
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getPosts",
+		"outputs": [
+			{
+				"name": "",
+				"type": "int256[]"
+			},
+			{
+				"name": "",
+				"type": "bytes32[]"
+			},
+			{
+				"name": "",
+				"type": "bytes32[]"
+			},
+			{
+				"name": "",
+				"type": "bytes32[]"
+			},
+			{
+				"name": "",
+				"type": "address[]"
+			},
+			{
+				"name": "",
+				"type": "bytes32[]"
+			},
+			{
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_commentnum",
+				"type": "uint256"
+			},
+			{
+				"name": "_postnum",
+				"type": "uint256"
+			}
+		],
+		"name": "getCommentVotes",
+		"outputs": [
+			{
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "userAddresses",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_name",
+				"type": "bytes32"
+			}
+		],
+		"name": "signup",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "getUser",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			},
+			{
+				"name": "",
+				"type": "uint256[]"
+			},
+			{
+				"name": "",
+				"type": "int256[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "addressposts",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "authorarr",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_name",
+				"type": "bytes32"
+			}
+		],
+		"name": "checkIfUser",
+		"outputs": [
+			{
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "loggedin",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_commentstring",
+				"type": "bytes32"
+			},
+			{
+				"name": "_time",
+				"type": "bytes32"
+			},
+			{
+				"name": "_loggedin",
+				"type": "uint256"
+			},
+			{
+				"name": "_postnum",
+				"type": "uint256"
+			}
+		],
+		"name": "addComment",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_commentnum",
+				"type": "uint256"
+			},
+			{
+				"name": "_postnum",
+				"type": "uint256"
+			}
+		],
+		"name": "getCommentContent",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_postnum",
+				"type": "uint256"
+			}
+		],
+		"name": "countComments",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "login",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_commentnum",
+				"type": "uint256"
+			},
+			{
+				"name": "_postnum",
+				"type": "uint256"
+			}
+		],
+		"name": "getCommentAuthor",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "bytes32"
+			},
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_postnum",
+				"type": "uint256"
+			},
+			{
+				"name": "_title",
+				"type": "bytes32"
+			},
+			{
+				"name": "_poststring",
+				"type": "bytes32"
+			},
+			{
+				"name": "_time",
+				"type": "bytes32"
+			},
+			{
+				"name": "_loggedin",
+				"type": "uint256"
+			}
+		],
+		"name": "addPost",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"name": "takenUsernames",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "postarr",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_commentnum",
+				"type": "uint256"
+			},
+			{
+				"name": "_postnum",
+				"type": "uint256"
+			}
+		],
+		"name": "voteCommentDown",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "countPosts",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getAllUsers",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "titlearr",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_postnum",
+				"type": "uint256"
+			}
+		],
+		"name": "votePostDown",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [],
+		"name": "updatePage",
+		"type": "event"
+	}
+]);
+
+ var login_con = ContractVar.at('0x0d7d1a126bd4b99ac2127980f1325080e5efbb2a');
+
+ $("#signup-button").click(function() {
+     login_con.checkIfUser($("#signup-input").val(), function(error, result){
+	     if (result.c[0] === 1){
+	     	document.getElementById("login-result").innerHTML = 'ALREADY SIGNED UP';
+	     	document.getElementById("login-result-2").innerHTML = '';
+	     } else if (result.c[0] == 2){
+	     	document.getElementById("login-result").innerHTML = 'USERNAME TAKEN';
+			document.getElementById("login-result-2").innerHTML = '';
+		} else if ($("#signup-input").val() != ''){
+	     	login_con.signup($("#signup-input").val(), function(error, result){});
+	     	document.getElementById("login-result").innerHTML = 'SIGNING UP';
+	     	document.getElementById("login-result-2").innerHTML = '';
+	     } else {
+	     	document.getElementById("login-result").innerHTML = 'ENTER NAME TO SIGN UP';
+	     }
+     });
+
+ });
+
+ $("#login-button").click(function() {
+     login_con.login(function(error, result){
+       if (result != 0x0000000000000000000000000000000000000000000000000000000000000000){
+	       	window.location.href = "login.html?uname="+ web3.toAscii(result);	
+       } else{
+       	document.getElementById("login-result").innerHTML = 'YOU DID NOT SIGN UP YET'
+       }
+     });
+ });
+
+  function logout() {
+	 window.location.href = "login.html"
+ };
+
+  function getParameterByName(name) {
+      var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+      return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+  }
+ var uname = getParameterByName('uname');
+ if (uname != undefined && uname != ''){
+    document.getElementById("login-result").innerHTML = 'WELCOME '
+  	document.getElementById("login-result-2").innerHTML = uname;
+}
+
+ function load_side_grid(){
+ 	if (uname != undefined){
+    var str =  `<ul><a id='to_profile' class='user-action-button' href='#'>PROFILE</a></ul>
+      <ul><a class='user-action-button-2' href='#'>SETTINGS</a></ul>
+      <ul><a class='user-action-button-2' href='login.html' onclick='logout()'>LOGOUT</a></ul>
+      <ul></ul>
+      <img src='./left_joystick.png' alt='X' class='reddit-pic'>`
+      document.getElementById("side-grid-container").innerHTML = str; 
+      document.getElementById("as-username").className = "as-user-style";
+      document.getElementById('as-username').innerHTML = uname.slice(0, 10);
+      document.getElementById("to_profile").href="profile.html?uname="+uname+"&disp_name=" + uname +'&addr='+web3.eth.defaultAccount;
+      document.getElementById("to_submit_post").href="submit_post.html?uname=" + uname;
+      document.getElementById("to_index").href="index.html?uname=" + uname;
+ 	} else {
+ 		var str =  `<ul><a class='user-action-button' href='login.html'>LOGIN</a></ul>
+	    <ul><a class='user-action-button-2' href='#'>SETTINGS</a></ul>
+	    <ul></ul>
+	    <img src='./left_joystick.png' alt='X' class='reddit-pic'>`
+	    document.getElementById("side-grid-container").innerHTML = str;
+	    document.getElementById("as-username").className = "as-user-style-2";
+      	document.getElementById('as-username').innerHTML = "Anon";
+ 	}
+ }
+
+</script>
+
+</html>
